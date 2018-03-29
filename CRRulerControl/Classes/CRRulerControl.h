@@ -62,6 +62,10 @@ typedef NS_OPTIONS(NSUInteger, CRRulerMarkType) {
  *  Value on center of CRRulerControl. Thay variable by proterty rangeFrom and rangeLength default 0
  */
 @property (nonatomic) IBInspectable CGFloat value;
+/**
+ Allow decimals in value. Default is `YES`.
+ */
+@property (nonatomic) IBInspectable BOOL decimalValue;
 
 /**
  *  Change value with animation or without it
