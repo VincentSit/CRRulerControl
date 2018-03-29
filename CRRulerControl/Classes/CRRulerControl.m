@@ -61,6 +61,7 @@ static const CGSize  kPointerImageViewSize = {2, 30};
     _rangeFrom = kDefaultRangeFrom;
     _rangeLength = kDefaultRangeLength;
     _rulerWidth = kDefaultRulerWidth;
+    _decimalValue = YES;
 }
 
 #pragma mark - Layout
@@ -137,14 +138,20 @@ static const CGSize  kPointerImageViewSize = {2, 30};
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     CGFloat value = [self valueForContentOffset:*targetContentOffset];
-    value = lroundf(value / self.rulerLayer.minorMark.frequency) * self.rulerLayer.minorMark.frequency;
+  
+    if (!self.decimalValue) {
+      value = lroundf(value / self.rulerLayer.minorMark.frequency) * self.rulerLayer.minorMark.frequency;
+    }
+  
     targetContentOffset->x = [self contentOffsetForValue:value].x;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    CGFloat oldValue = [self valueForContentOffset:scrollView.contentOffset];
-    _value = lroundf(oldValue / self.rulerLayer.minorMark.frequency) * self.rulerLayer.minorMark.frequency;
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+    if (!self.decimalValue) {
+      CGFloat oldValue = [self valueForContentOffset:scrollView.contentOffset];
+      _value = lroundf(oldValue / self.rulerLayer.minorMark.frequency) * self.rulerLayer.minorMark.frequency;
+      [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
 }
 
 #pragma mark - Helper for scroll
